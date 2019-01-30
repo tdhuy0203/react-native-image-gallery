@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { View, Text, Image, ViewPropTypes } from 'react-native';
 import PropTypes from 'prop-types';
 import ViewTransformer from '../ViewTransformer';
+import FastImage from 'react-native-fast-image';
 
 export default class TransformableImage extends PureComponent {
     static propTypes = {
@@ -144,7 +145,7 @@ export default class TransformableImage extends PureComponent {
         const { imageDimensions, viewWidth, viewHeight, error, keyAccumulator, imageLoaded } = this.state;
         const { style, image, imageComponent, resizeMode, enableTransform, enableScale, enableTranslate, onTransformGestureReleased, onViewTransformed } = this.props;
 
-        let maxScale = 1;
+        let maxScale = 100;
         let contentAspectRatio;
         let width, height; // imageDimensions
 
@@ -155,10 +156,6 @@ export default class TransformableImage extends PureComponent {
 
         if (width && height) {
             contentAspectRatio = width / height;
-            if (viewWidth && viewHeight) {
-                maxScale = Math.max(width / viewWidth, height / viewHeight);
-                maxScale = Math.max(1, maxScale);
-            }
         }
 
         const imageProps = {
@@ -166,13 +163,13 @@ export default class TransformableImage extends PureComponent {
             imageLoaded,
             source: image.source,
             style: [style, { backgroundColor: 'transparent' }],
-            resizeMode: resizeMode,
+            resizeMode: FastImage.resizeMode.contain,
             onLoadStart: this.onLoadStart,
             onLoad: this.onLoad,
             capInsets: { left: 0.1, top: 0.1, right: 0.1, bottom: 0.1 }
         };
 
-        const content = imageComponent ? imageComponent(imageProps, imageDimensions) : <Image { ...imageProps } />;
+        const content = imageComponent ? imageComponent(imageProps, imageDimensions) : <FastImage { ...imageProps } />;
 
         return (
             <ViewTransformer
