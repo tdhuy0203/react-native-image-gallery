@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { View, Text, Image, ViewPropTypes } from 'react-native';
 import PropTypes from 'prop-types';
 import ViewTransformer from '../ViewTransformer';
-import FastImage from 'react-native-fast-image';
 
 export default class TransformableImage extends PureComponent {
     static propTypes = {
@@ -163,13 +162,13 @@ export default class TransformableImage extends PureComponent {
             imageLoaded,
             source: image.source,
             style: [style, { backgroundColor: 'transparent' }],
-            resizeMode: FastImage.resizeMode.contain,
+            resizeMode: 'contain',
             onLoadStart: this.onLoadStart,
             onLoad: this.onLoad,
             capInsets: { left: 0.1, top: 0.1, right: 0.1, bottom: 0.1 }
         };
 
-        const content = imageComponent ? imageComponent(imageProps, imageDimensions) : <FastImage { ...imageProps } />;
+        const content = imageComponent ? imageComponent(imageProps, imageDimensions) : <Image { ...imageProps } />;
 
         return (
             <ViewTransformer
